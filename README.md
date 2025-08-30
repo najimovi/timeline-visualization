@@ -1,6 +1,6 @@
 # Timeline Visualization
 
-A React timeline visualization that displays the events provided in a compact way using a layout algorithm to auto accommodate items in the UI avoiding overlapping.
+This React timeline visualization renders events tightly into shared lanes when possible, favoring clarity by easing the packing when names require space.
 
 ## Quick Start
 
@@ -27,6 +27,13 @@ Open [http://localhost:5173](http://localhost:5173) in the browser.
 - **Production Build**
 
 ```bash
+# Clone repository
+git clone https://github.com/najimovi/timeline-visualization
+cd timeline-visualization
+
+# Install dependencies
+npm install
+
 # Type-check and build
 npm run build
 
@@ -103,7 +110,6 @@ Open [http://localhost:4173](http://localhost:4173) in the browser.
   - **Optional Features**: Tackle drag-and-drop, inline editing, others
   - **Use React 19 Compiler**: Remove manual memoization and let it optimize
   - **Filtering/Search**: Real-time event filtering with Fuse.js
-  - **AI-Powered Development Setup**: Claude Code with specialized agents, commands and hooks
   - **Pre-commit Hooks**: Prettier, ESLint, Husky, type-check, test:staged, Conventional Commits
   - **PR Templates**: Checklist ensuring quality standards
   - **Dynamic Inline Styling**: work around dynamic stylings that can't be covered by Tailwind via a different/complementary solution
