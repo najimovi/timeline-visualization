@@ -22,25 +22,10 @@ Open [http://localhost:5173](http://localhost:5173); will automatically render t
 
 ## Core Philosophy
 
-#### KISS (Keep It Simple, Stupid)
-
-Evident in the pragmatic decision to inline single-use functions and avoid unnecessary abstraction layers.
-
-#### YAGNI (You Aren't Gonna Need It)
-
-Resisted adding features like filtering, multi-select, or drag-and-drop without explicit requirements.
-
-#### Component-First Architecture
-
-Each component has single responsibility with co-located styles and logic.
-
-#### SOLID Principles
-
-- **Single Responsibility**: Each hook handles one concern
-- **Open/Closed**: Extensible via props without modifying core logic
-- **Liskov Substitution**: Components are interchangeable
-- **Interface Segregation**: Minimal, focused interfaces
-- **Dependency Inversion**: Components depend on abstractions (hooks)
+- **Component-First Architecture**: Each component has a single responsibility, with co-located styles and logic.
+- **YAGNI (You Aren't Gonna Need It)**: Resisted unnecessary logic
+- **SOLID Principles**: Interfaces capture event contracts; heavy logic lives in hooks; utilities keep dependencies decoupled.
+- **UX Focused**: Purposeful simplicity—optimize for quick comprehension; keep behavior predictable and calm UX.
 
 ## Implementation Overview
 
@@ -82,11 +67,10 @@ Each component has single responsibility with co-located styles and logic.
 - **Research Prior Art**: Investigate existing/efficient approaches to solving overlap and apply
 - **Use D3.js (if possible)**: Consider it if this were to grow/continue.
 - **UX**
-  - **Events Hover Features**: Improve interactivity by bringing hovered events to the front and/or highlighting them
+  - **Events Hover/Click Features**: Improve interactivity by bringing events to the front, highlight them, perhaps increase size slightly if needed for better readability
   - **Additional Interactions**: Help users better explore the timeline
 - **Architecture Enhancements**
   - **Design System**: Storybook for isolated component development and documentation
-  - **Error Boundaries**: To gracefully handle runtime errors in production
   - **Observability**: Integrate Sentry/DataDog for error/performance monitoring
 - **Testing Infrastructure**
   - **Test-Driven Development**: Start with comprehensive test suite using Vitest + React Testing Library
@@ -98,18 +82,15 @@ Each component has single responsibility with co-located styles and logic.
   - **WCAG 2.1 AA Compliance**: Keyboard navigation, screen reader support, color contrast compliance, focus management, etc
   - **Color Blind Modes**: Alternative palettes, patterns for distinction
   - **Reduced Motion**: Respect `prefers-reduced-motion` settings
-- **Given More Time / Nice To Have Improvements**
-  - **Use React 19 Compiler**: Remove manual memoization and let it optimize
+- **Given More Time / Further Continue Development**
   - **Allow users to add events**: dynamically accommodate in timeline
   - **Optional Features**: Tackle drag-and-drop, inline editing, others
+  - **Use React 19 Compiler**: Remove manual memoization and let it optimize
   - **Filtering/Search**: Real-time event filtering with Fuse.js
-  - **Export Functionality**: PNG/SVG/PDF generation
   - **AI-Powered Development Setup**: Claude Code with specialized agents, commands and hooks
   - **Pre-commit Hooks**: Prettier, ESLint, Husky, type-check, test:staged, Conventional Commits
   - **PR Templates**: Checklist ensuring quality standards
-  - **Error Boundaries**: Graceful degradation strategies
-  - **Observability**: Sentry, DataDog, custom analytics
-  - **Dynamic Inline Styling**: work around dynamic stylings that can't be covered by Tailwind via a different complementary solution
+  - **Dynamic Inline Styling**: work around dynamic stylings that can't be covered by Tailwind via a different/complementary solution
   - **CI/CD Pipeline**: Robust pipeline, GitHub Actions sample workflow:
 
   ```yaml
@@ -233,11 +214,11 @@ npm run preview
 # Serves at http://localhost:4173
 ```
 
-## React 19 Considerations
+## Note: React 19
 
-- While using React 19, the implementation remains conservative:
-  - **Avoided Latest Features**: No use of Server Components or Actions (stability)
-  - **Compiler Benefits Unutilized**: Manual memoization still applied (could be removed)
+- While it uses React 19, the implementation remains conservative:
+  - **Avoided Latest Features**: No use of Server Components or Actions (unneeded for this scope)
+  - **Compiler Not Used**: Manual memoization still applied (could be removed)
   - **Future Migration Path**: Ready for React Compiler optimizations when stable
 
 ---
