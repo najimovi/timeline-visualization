@@ -9,12 +9,12 @@ export interface ZoomConfig {
 
 export interface ZoomControls {
   zoomLevel: number;
-  handleZoomIn: VoidFunction;
-  handleZoomOut: VoidFunction;
+  handleZoomIn: () => void;
+  handleZoomOut: () => void;
   canZoomIn: boolean;
   canZoomOut: boolean;
   zoomPercentage: string;
-  resetZoom: VoidFunction;
+  resetZoom: () => void;
 }
 
 interface UseZoomProps {
@@ -103,21 +103,4 @@ export const useZoom = ({ config = {} }: UseZoomProps = {}): ZoomControls => {
     zoomPercentage,
     resetZoom,
   };
-};
-
-/**
- * Utility hook for zoom-responsive calculations
- * Useful for components that need to adapt behavior based on zoom level
- */
-export const useZoomResponsive = (zoomLevel: number) => {
-  return useMemo(
-    () => ({
-      isZoomedOut: zoomLevel < 0.75,
-      isZoomedIn: zoomLevel > 1.25,
-      isNormalZoom: zoomLevel >= 0.75 && zoomLevel <= 1.25,
-      zoomCategory:
-        zoomLevel < 0.75 ? 'out' : zoomLevel > 1.25 ? 'in' : 'normal',
-    }),
-    [zoomLevel],
-  );
 };

@@ -54,6 +54,7 @@ export const useTimelineLayout = ({
         color: colors[index % colors.length],
       }))
       .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+    console.log('Items with dates: ', { itemsWithDates });
 
     // Phase 2: Calculate timeline bounds and normalization factors
     const minDate = itemsWithDates[0].startDate;
@@ -137,6 +138,7 @@ export const useTimelineLayout = ({
         width,
       };
 
+      console.log('Assigned item to lane: ', assignedLane, { processedItem });
       lanes[assignedLane].push(processedItem);
       processed.push(processedItem);
     }
