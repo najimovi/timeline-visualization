@@ -83,7 +83,7 @@ Open [http://localhost:4173](http://localhost:4173) in the browser.
 - **Specialized Hooks**: Made use of React hooks to externalize several sections of the logic:
   - `useTimelineLayout`: Lane allocation algorithm preventing overlaps
   - `useTimeMarkers`: Zoom-responsive date calculations with viewport awareness
-  - `useZoom`: Shared zoom state via React Context for consistent behavior
+  - `useZoom`: All zoom relative logic centralized and reusable
   - `useMaxLanes` & `useTimelineBounds`: Utility hooks following single responsibility principle
 
 ### 3. What I Would Change If Starting Over
@@ -148,11 +148,12 @@ Open [http://localhost:4173](http://localhost:4173) in the browser.
     │   │   ├── ZoomControls.tsx       # Zoom control buttons
     │   │   └── EventLegend.tsx        # Bottom summary legend
     │   ├── contexts/
+    │   │   ├── ItemsContext.tsx       # Shared timeline data via React Context
     │   │   └── ZoomContext.tsx        # Shared zoom state via React Context
     │   ├── hooks/
     │   │   ├── useTimelineLayout.ts   # Lane allocation algorithm
     │   │   ├── useTimeMarkers.ts      # Time marker calculations
-    │   │   ├── useZoom.ts             # Zoom state access (via Context)
+    │   │   ├── useZoom.ts             # Zoom state access
     │   │   ├── useMaxLanes.ts         # Max lanes calculation
     │   │   └── useTimelineBounds.ts   # Timeline date bounds
     │   ├── lib/
