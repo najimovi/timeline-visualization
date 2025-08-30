@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { calculateBarPixelWidth } from '@/lib/calculations';
 
 export interface TimelineItem {
   id: number;
@@ -49,8 +50,9 @@ export const useTimelineLayout = ({
     const itemsWithDates = items
       .map((item, index) => ({
         ...item,
-        startDate: new Date(item.start),
-        endDate: new Date(item.end),
+        // Parse dates as local midnight to avoid timezone issues
+        startDate: new Date(item.start + 'T00:00:00'),
+        endDate: new Date(item.end + 'T00:00:00'),
         color: colors[index % colors.length],
       }))
       .sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
@@ -79,9 +81,9 @@ export const useTimelineLayout = ({
       const width = Math.max(duration / totalDuration, 0.02); // Minimum 2% width for visibility
 
       // Advanced text-fitting calculation based on zoom level
-      const estimatedTextWidth = item.name.length * 8;
-      const barPixelWidth = width * 1200 * zoomLevel;
-      const textWillFit = barPixelWidth > estimatedTextWidth + 32;
+      const barPixelWidth = calculateBarPixelWidth(width, 1200, zoomLevel);
+      // Check if text will fit: estimate 8px per character + 32px padding
+      const textWillFit = barPixelWidth > item.name.length * 8 + 32;
 
       let assignedLane = -1;
 

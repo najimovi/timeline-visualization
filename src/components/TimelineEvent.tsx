@@ -1,10 +1,6 @@
 import React from 'react';
 import type { ProcessedItem } from '@/hooks/useTimelineLayout';
 import { TIMELINE_LAYOUT } from '@/lib/constants';
-import {
-  calculateDurationInDays,
-  calculateBarPixelWidth,
-} from '@/lib/calculations';
 
 interface TimelineEventProps {
   item: ProcessedItem;
@@ -12,16 +8,26 @@ interface TimelineEventProps {
 }
 
 const TimelineEvent = React.memo(({ item, zoomLevel }: TimelineEventProps) => {
-  // Calculate bar dimensions and text fitting logic
   const barWidth = Math.max(
     item.width * 100,
     TIMELINE_LAYOUT.MINIMUM_BAR_WIDTH,
   );
-  const estimatedTextWidth =
-    item.name.length * TIMELINE_LAYOUT.ESTIMATED_CHAR_WIDTH;
-  const barPixelWidth = calculateBarPixelWidth(barWidth / 100, 1200, zoomLevel);
-  const showTextInside =
-    barPixelWidth > estimatedTextWidth + TIMELINE_LAYOUT.TEXT_PADDING;
+
+  // Text fitting logic: determine if text fits comfortably inside the bar
+  const textLength = item.name.length;
+
+  // Calculate minimum width needed based on text length
+  let minWidthPercent = 6;
+  if (textLength > 20) {
+    minWidthPercent = 18;
+  } else if (textLength >= 10) {
+    minWidthPercent = 10;
+  }
+
+  // Adjust for zoom level - more lenient at lower zoom levels
+  const zoomFactor = Math.sqrt(Math.max(0.5, Math.min(1, zoomLevel)));
+  const adjustedMinWidth = minWidthPercent / zoomFactor;
+  const showTextInside = barWidth >= adjustedMinWidth;
 
   return (
     <div
@@ -34,7 +40,7 @@ const TimelineEvent = React.memo(({ item, zoomLevel }: TimelineEventProps) => {
       }}
       tabIndex={0}
       role="button"
-      aria-label={`Event: ${item.name}, from ${item.start} to ${item.end}, lane ${item.lane + 1}`}
+      aria-label={`Event: ${item.name}, from ${item.start} to ${item.end}`}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -76,10 +82,6 @@ const TimelineEvent = React.memo(({ item, zoomLevel }: TimelineEventProps) => {
             </div>
             <div className="text-muted-foreground mt-1 text-xs">
               {item.start} → {item.end}
-            </div>
-            <div className="text-muted-foreground text-xs opacity-75">
-              Lane {item.lane + 1} • Duration:{' '}
-              {calculateDurationInDays(item.startDate, item.endDate)} days
             </div>
           </div>
         </div>

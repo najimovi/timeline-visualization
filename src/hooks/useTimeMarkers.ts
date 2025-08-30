@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import type { ProcessedItem } from './useTimelineLayout';
 import { calculateOptimalDayStep } from '@/lib/calculations';
 
@@ -20,14 +20,7 @@ interface UseTimeMarkersProps {
 /**
  * Advanced time markers hook that generates intelligent date markers based on timeline data
  *
- * Features:
- * - Adaptive marker density based on zoom level
- * - Precise date boundary calculations
- * - Optimized date iteration algorithms
- * - Smart positioning with percentage-based coordinates
- * - Month boundary detection and alignment
- *
- * Zoom-responsive behavior:
+ * Zoom-responsive behavior (Desktop):
  * - < 0.7x: Bi-weekly markers (14 day intervals)
  * - 0.7x - 1.0x: Weekly markers (7 day intervals)
  * - 1.0x - 1.5x: Every 3 days
@@ -41,11 +34,19 @@ export const useTimeMarkers = ({
   processedItems,
   zoomLevel,
 }: UseTimeMarkersProps): TimeMarkersResult => {
+  const [viewportWidth, setViewportWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200,
+  );
+
+  useEffect(() => {
+    const handleResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return useMemo(() => {
-    // Early return for empty timeline
     if (!processedItems.length) return { months: [], days: [] };
 
-    // Calculate timeline bounds from processed items
     const minDate = new Date(
       Math.min(...processedItems.map((item) => item.startDate.getTime())),
     );
@@ -60,15 +61,21 @@ export const useTimeMarkers = ({
 
     // Align to month boundary for clean visual separation
     monthCurrent.setDate(1);
-    monthCurrent.setHours(0, 0, 0, 0);
+    // Set to noon to avoid timezone issues
+    monthCurrent.setHours(12, 0, 0, 0);
 
     while (monthCurrent <= maxDate) {
       const position =
         ((monthCurrent.getTime() - minDate.getTime()) / totalDuration) * 100;
-      monthMarkers.push({
-        date: new Date(monthCurrent),
-        position,
-      });
+
+      // Only add month markers that are at or after the timeline start
+      if (position >= -0.1) {
+        // Small tolerance for rounding
+        monthMarkers.push({
+          date: new Date(monthCurrent),
+          position: Math.max(0, position), // Ensure position is never negative
+        });
+      }
 
       // Advance to next month using native Date methods for accuracy
       monthCurrent.setMonth(monthCurrent.getMonth() + 1);
@@ -76,19 +83,27 @@ export const useTimeMarkers = ({
 
     // Generate adaptive day markers based on zoom level
     const dayMarkers: TimeMarker[] = [];
-    const dayCurrent = new Date(minDate);
-    dayCurrent.setHours(0, 0, 0, 0); // Normalize to day boundary
 
-    // Smart zoom-responsive marker density algorithm
-    const dayStep = calculateOptimalDayStep(zoomLevel);
+    // Start from minDate, set to noon to avoid timezone issues
+    const dayCurrent = new Date(minDate);
+    dayCurrent.setHours(12, 0, 0, 0);
+
+    // Smart zoom-responsive density algorithm
+    const dayStep = calculateOptimalDayStep(zoomLevel, viewportWidth);
 
     while (dayCurrent <= maxDate) {
+      // Calculate position relative to timeline start
       const position =
         ((dayCurrent.getTime() - minDate.getTime()) / totalDuration) * 100;
-      dayMarkers.push({
-        date: new Date(dayCurrent),
-        position,
-      });
+
+      // Only add markers that are within or after the timeline start
+      // The position check ensures we don't show markers before the timeline
+      if (position >= -0.1) {
+        dayMarkers.push({
+          date: new Date(dayCurrent),
+          position: Math.max(0, position),
+        });
+      }
 
       // Advance by calculated step size
       dayCurrent.setDate(dayCurrent.getDate() + dayStep);
@@ -98,5 +113,5 @@ export const useTimeMarkers = ({
       months: monthMarkers,
       days: dayMarkers,
     };
-  }, [processedItems, zoomLevel]);
+  }, [processedItems, zoomLevel, viewportWidth]);
 };
