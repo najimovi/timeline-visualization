@@ -167,7 +167,7 @@ Open [http://localhost:4173](http://localhost:4173) in the browser.
   - **Vite Minimalist Setup**: follow Vite's minimalist but robust out of the box suggested structure
 
 - **Tech Stack**
-  - **React 19**: Latest stable version
+  - **React 19**: Latest stable version released with performance optimizations
   - **TypeScript**: Chosen for:
     - **Type Safety**: Catches errors at compile-time, not runtime
     - **IntelliSense**: Superior IDE support accelerating development
@@ -213,5 +213,3 @@ Open [http://localhost:4173](http://localhost:4173) in the browser.
   - **Avoided Latest Features**: No use of Server Components or Actions (unneeded for this scope)
   - **Compiler Not Used**: Manual memoization still applied (could be removed)
   - **Future Migration Path**: Ready for React Compiler optimizations when stable
-
----
