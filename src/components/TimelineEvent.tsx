@@ -34,7 +34,7 @@ const TimelineEvent = React.memo(({ item, zoomLevel }: TimelineEventProps) => {
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          // TODO: Handle keyboard interaction (e.g., open details)
+          // TODO: Add keyboard interaction
         }
       }}
     >
