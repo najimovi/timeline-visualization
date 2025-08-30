@@ -9,13 +9,10 @@ function App() {
           <h1 className="text-foreground mb-2 text-3xl font-bold">
             Timeline Visualization
           </h1>
-          <p className="text-muted-foreground">
-            Interactive timeline with intelligent lane sharing and zoom
-            functionality
-          </p>
         </header>
-
-        <Timeline items={timelineItems} />
+        <main>
+          <Timeline items={timelineItems} />
+        </main>
       </div>
     </div>
   );

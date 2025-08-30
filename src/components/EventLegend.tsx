@@ -2,20 +2,11 @@ import type { ProcessedItem } from '@/hooks/useTimelineLayout';
 
 interface EventLegendProps {
   processedItems: ProcessedItem[];
-  maxLanes: number;
 }
 
-export default function EventLegend({
-  processedItems,
-  maxLanes,
-}: EventLegendProps) {
+export default function EventLegend({ processedItems }: EventLegendProps) {
   return (
     <div className="text-muted-foreground space-y-2 text-sm">
-      <p>
-        <strong>{processedItems.length}</strong> events across{' '}
-        <strong>{maxLanes}</strong> lanes • Hover for details • Use zoom
-        controls to adjust view
-      </p>
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         {processedItems.slice(0, 12).map((item) => (
           <div

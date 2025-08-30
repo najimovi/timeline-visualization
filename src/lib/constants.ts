@@ -13,7 +13,7 @@ export const TIMELINE_LAYOUT = {
   LANE_HEIGHT: 80, // Vertical space per lane in pixels
   EVENT_HEIGHT: 50, // Height of each event bar
   LANE_VERTICAL_OFFSET: 15, // Top margin for events within lanes
-  HEADER_HEIGHT: 250, // Total height for time marker headers
+  HEADER_HEIGHT: 60, // Total height for time marker headers
   TIME_MARKER_HEIGHT: 16, // Height of the time marker section
   MINIMUM_BAR_WIDTH: 2, // Minimum width percentage for visibility
   OVERLAP_BUFFER: 0.003, // Buffer to prevent visual overlap (0.3%)
@@ -23,9 +23,6 @@ export const TIMELINE_LAYOUT = {
   EDGE_THRESHOLD: 70, // Percentage threshold for tooltip edge detection
 } as const;
 
-/**
- * Zoom configuration constants
- */
 export const ZOOM_CONFIG = {
   MIN: 0.5, // 50% minimum zoom
   MAX: 4, // 400% maximum zoom
