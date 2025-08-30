@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import type { ProcessedItem } from './useTimelineLayout';
+import { calculateOptimalDayStep } from '@/lib/calculations';
 
 export interface TimeMarker {
   date: Date;
@@ -98,23 +99,4 @@ export const useTimeMarkers = ({
       days: dayMarkers,
     };
   }, [processedItems, zoomLevel]);
-};
-
-/**
- * Calculates optimal day marker interval based on zoom level
- * Uses progressive disclosure principle - more detail at higher zoom levels
- *
- * @param zoomLevel - Current zoom level
- * @returns Number of days between markers
- */
-const calculateOptimalDayStep = (zoomLevel: number): number => {
-  if (zoomLevel < 0.7) {
-    return 14; // Bi-weekly markers when zoomed out - prevents overcrowding
-  } else if (zoomLevel < 1) {
-    return 7; // Weekly markers for moderate zoom - good balance
-  } else if (zoomLevel < 1.5) {
-    return 3; // Every 3 days when getting detailed - more granular
-  } else {
-    return 1; // Daily markers at high zoom - maximum detail
-  }
 };

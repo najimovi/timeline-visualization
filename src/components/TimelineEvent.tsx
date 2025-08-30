@@ -1,6 +1,10 @@
 import React from 'react';
 import type { ProcessedItem } from '@/hooks/useTimelineLayout';
 import { TIMELINE_LAYOUT } from '@/lib/constants';
+import {
+  calculateDurationInDays,
+  calculateBarPixelWidth,
+} from '@/lib/calculations';
 
 interface TimelineEventProps {
   item: ProcessedItem;
@@ -15,7 +19,7 @@ const TimelineEvent = React.memo(({ item, zoomLevel }: TimelineEventProps) => {
   );
   const estimatedTextWidth =
     item.name.length * TIMELINE_LAYOUT.ESTIMATED_CHAR_WIDTH;
-  const barPixelWidth = (barWidth / 100) * 1200 * zoomLevel;
+  const barPixelWidth = calculateBarPixelWidth(barWidth / 100, 1200, zoomLevel);
   const showTextInside =
     barPixelWidth > estimatedTextWidth + TIMELINE_LAYOUT.TEXT_PADDING;
 
@@ -75,7 +79,7 @@ const TimelineEvent = React.memo(({ item, zoomLevel }: TimelineEventProps) => {
             </div>
             <div className="text-muted-foreground text-xs opacity-75">
               Lane {item.lane + 1} • Duration:{' '}
-              {Math.ceil(item.duration / (1000 * 60 * 60 * 24))} days
+              {calculateDurationInDays(item.startDate, item.endDate)} days
             </div>
           </div>
         </div>

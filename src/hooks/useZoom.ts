@@ -9,12 +9,12 @@ export interface ZoomConfig {
 
 export interface ZoomControls {
   zoomLevel: number;
-  handleZoomIn: () => void;
-  handleZoomOut: () => void;
+  handleZoomIn: VoidFunction;
+  handleZoomOut: VoidFunction;
   canZoomIn: boolean;
   canZoomOut: boolean;
   zoomPercentage: string;
-  resetZoom: () => void;
+  resetZoom: VoidFunction;
 }
 
 interface UseZoomProps {

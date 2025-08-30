@@ -1,5 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import type { TimeMarkersResult } from '@/hooks/useTimeMarkers';
+import { formatMonthYear, formatDayMonth } from '@/lib/formatters';
 
 interface TimeMarkersProps {
   timeMarkers: TimeMarkersResult;
@@ -20,10 +21,7 @@ export default function TimeMarkers({
           style={{ left: `${marker.position}%` }}
         >
           <span className="text-foreground absolute top-1 left-2 text-sm font-semibold">
-            {marker.date.toLocaleDateString('en-US', {
-              month: 'short',
-              year: 'numeric',
-            })}
+            {formatMonthYear(marker.date)}
           </span>
         </div>
       ))}
@@ -42,10 +40,7 @@ export default function TimeMarkers({
               zoomLevel < 1 ? 'text-[9px]' : 'text-[10px]',
             )}
           >
-            {marker.date.toLocaleDateString('en-US', {
-              month: '2-digit',
-              day: '2-digit',
-            })}
+            {formatDayMonth(marker.date)}
           </span>
         </div>
       ))}
