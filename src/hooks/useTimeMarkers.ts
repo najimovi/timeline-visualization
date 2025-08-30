@@ -73,11 +73,11 @@ export const useTimeMarkers = ({
         // Small tolerance for rounding
         monthMarkers.push({
           date: new Date(monthCurrent),
-          position: Math.max(0, position), // Ensure position is never negative
+          position: Math.max(0, position),
         });
       }
 
-      // Advance to next month using native Date methods for accuracy
+      // Advance to next month
       monthCurrent.setMonth(monthCurrent.getMonth() + 1);
     }
 

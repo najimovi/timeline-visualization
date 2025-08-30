@@ -28,9 +28,9 @@ interface UseTimelineLayoutProps {
  * Advanced timeline layout hook that implements intelligent lane allocation algorithm
  *
  * Features:
- * - Greedy lane assignment for space efficiency
- * - Smart conflict resolution based on text length
- * - Buffer-based overlap prevention
+ * - Greedy lane assignment for space efficiency (https://en.wikipedia.org/wiki/Interval_graph)
+ * - Smart conflict resolution based on text length (https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/)
+ * - Buffer-based overlap prevention (https://docs.mapbox.com/help/troubleshooting/optimize-map-label-placement/)
  * - Adaptive text-fitting logic based on zoom level
  *
  * @param items - Array of timeline events
@@ -47,6 +47,7 @@ export const useTimelineLayout = ({
     if (!items.length) return [];
 
     // Phase 1: Parse dates and sort chronologically
+    // Sorting by start time then greedily assigning to lanes corresponds to interval partitioning / greedy coloring on interval graphs.
     const itemsWithDates = items
       .map((item, index) => ({
         ...item,
@@ -59,6 +60,7 @@ export const useTimelineLayout = ({
     console.log('Items with dates: ', { itemsWithDates });
 
     // Phase 2: Calculate timeline bounds and normalization factors
+    // Normalizing position to [0,1] is the same mapping idea as a time -> linear scale.
     const minDate = itemsWithDates[0].startDate;
     const maxDate = itemsWithDates.reduce(
       (max, item) => (item.endDate > max ? item.endDate : max),
@@ -78,7 +80,7 @@ export const useTimelineLayout = ({
       ); // Minimum 1 day
       const position =
         (item.startDate.getTime() - minDate.getTime()) / totalDuration;
-      const width = Math.max(duration / totalDuration, 0.02); // Minimum 2% width for visibility
+      const width = Math.max(duration / totalDuration, 0.02);
 
       // Advanced text-fitting calculation based on zoom level
       const barPixelWidth = calculateBarPixelWidth(width, 1200, zoomLevel);
@@ -87,7 +89,7 @@ export const useTimelineLayout = ({
 
       let assignedLane = -1;
 
-      // Greedy lane assignment algorithm
+      // Greedy lane assignment algorithm (interval partitioning / left-to-right placement)
       for (let laneIndex = 0; laneIndex < lanes.length; laneIndex++) {
         const lane = lanes[laneIndex];
         let canFit = true;

@@ -37,7 +37,6 @@ const DEFAULT_ZOOM_CONFIG: ZoomConfig = {
  * - Performance-optimized event handlers with useCallback
  * - Boundary state management (canZoomIn/canZoomOut)
  * - Formatted zoom percentage for UI display
- * - Reset zoom functionality for user convenience
  * - Smooth zoom progression with exponential steps
  *
  * Performance optimizations:
@@ -80,7 +79,6 @@ export const useZoom = ({ config = {} }: UseZoomProps = {}): ZoomControls => {
     setZoomLevel(zoomConfig.initial);
   }, [zoomConfig.initial]);
 
-  // Memoized boundary calculations for UI state management
   const canZoomIn = useMemo(() => {
     return zoomLevel < zoomConfig.max;
   }, [zoomLevel, zoomConfig.max]);
@@ -89,7 +87,6 @@ export const useZoom = ({ config = {} }: UseZoomProps = {}): ZoomControls => {
     return zoomLevel > zoomConfig.min;
   }, [zoomLevel, zoomConfig.min]);
 
-  // Memoized zoom percentage formatting for consistent UI display
   const zoomPercentage = useMemo(() => {
     return `${Math.round(zoomLevel * 100)}%`;
   }, [zoomLevel]);

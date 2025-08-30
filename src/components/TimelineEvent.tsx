@@ -24,7 +24,7 @@ const TimelineEvent = React.memo(({ item, zoomLevel }: TimelineEventProps) => {
     minWidthPercent = 10;
   }
 
-  // Adjust for zoom level - more lenient at lower zoom levels
+  // Adjust for zoom level
   const zoomFactor = Math.sqrt(Math.max(0.5, Math.min(1, zoomLevel)));
   const adjustedMinWidth = minWidthPercent / zoomFactor;
   const showTextInside = barWidth >= adjustedMinWidth;
@@ -96,7 +96,7 @@ const TimelineEvent = React.memo(({ item, zoomLevel }: TimelineEventProps) => {
             top:
               barWidth < 15
                 ? `${15 + item.lane * 2}px`
-                : `${55 + item.lane * 3}px`, // Stagger labels by lane to prevent overlap
+                : `${55 + item.lane * 3}px`, // Space out labels by lane to prevent overlap
             maxWidth: '200px',
           }}
         >
