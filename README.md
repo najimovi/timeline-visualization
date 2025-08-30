@@ -4,21 +4,37 @@ A React timeline visualization that displays the events provided in a compact wa
 
 ## Quick Start
 
+- **Prerequisites**
+  - Node.js 18+ (LTS recommended)
+  - npm 9+ (bundled with Node.js)
+
+- **Development**
+
 ```bash
+# Clone repository
+git clone https://github.com/najimovi/timeline-visualization
+cd timeline-visualization
+
 # Install dependencies
 npm install
 
 # Start development server
 npm run dev
+```
 
-# Build for production
+Open [http://localhost:5173](http://localhost:5173) in the browser.
+
+- **Production Build**
+
+```bash
+# Type-check and build
 npm run build
 
-# Preview production build
+# Preview production build locally
 npm run preview
 ```
 
-Open [http://localhost:5173](http://localhost:5173); will automatically render the sample data from `src/data/timelineItems.ts`.
+Open [http://localhost:4173](http://localhost:4173) in the browser.
 
 ## Core Philosophy
 
@@ -50,11 +66,11 @@ Open [http://localhost:5173](http://localhost:5173); will automatically render t
   - **Collision Detection**: Overlap prevention using date-based positioning
 - **Performance-First Design**
   - `React.memo` / `useCallback` / `useMemo`: to prevent unnecessary re-renders
-  - **Viewport-aware optimizations** for different screen sizes
 - **UX Features**
+  - **Viewport-aware optimizations** for different screen sizes
   - **Responsive Zoom**: 50%-400% range with adaptive time marker density
   - **Color Palette**: High-contrast palette ensuring visual distinction
-  - **Axis Labels**: To more easily identify days/months
+  - **Axis Labels**: To better identify days/months
   - **Tooltips**: With complete event information
 - **Specialized Hooks**: Made use of React hooks to externalize several sections of the logic:
   - `useTimelineLayout`: Lane allocation algorithm preventing overlaps
@@ -183,36 +199,7 @@ Open [http://localhost:5173](http://localhost:5173); will automatically render t
 
 ### 6. Build and Run Instructions
 
-#### Prerequisites
-
-- Node.js 18+ (LTS recommended)
-- npm 9+ (bundled with Node.js)
-
-#### Development
-
-```bash
-# Clone repository
-git clone <repository-url>
-cd events-timeline
-
-# Install dependencies
-npm install
-
-# Start development server with HMR
-npm run dev
-# Opens at http://localhost:5173
-```
-
-#### Production Build
-
-```bash
-# Type-check and build
-npm run build
-
-# Preview production build locally
-npm run preview
-# Serves at http://localhost:4173
-```
+- See **Quick Start** section above for detailed instructions.
 
 ## Note: React 19
 

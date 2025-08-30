@@ -7,10 +7,7 @@ interface TimeMarkersProps {
   zoomLevel: number;
 }
 
-export default function TimeMarkers({
-  timeMarkers,
-  zoomLevel,
-}: TimeMarkersProps) {
+export default function TimeMarkers({ timeMarkers }: TimeMarkersProps) {
   return (
     <div className="border-border bg-muted/30 absolute top-0 right-0 left-0 h-16 border-b">
       {/* Month markers */}

@@ -66,10 +66,7 @@ export default function Timeline({ items }: TimelineProps) {
         zoomLevel={zoomLevel}
       />
 
-      <EventLegend
-        processedItems={processedItems}
-        maxLanes={maxLanes}
-      />
+      <EventLegend processedItems={processedItems} />
     </div>
   );
 }
