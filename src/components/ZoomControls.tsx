@@ -1,21 +1,15 @@
 import { ZoomIn, ZoomOut } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
+import { useZoom } from '@/hooks/useZoom';
 
-interface ZoomControlsProps {
-  zoomPercentage: string;
-  handleZoomIn: VoidFunction;
-  handleZoomOut: VoidFunction;
-  canZoomIn: boolean;
-  canZoomOut: boolean;
-}
-
-export default function ZoomControls({
-  zoomPercentage,
-  handleZoomIn,
-  handleZoomOut,
-  canZoomIn,
-  canZoomOut,
-}: ZoomControlsProps) {
+export default function ZoomControls() {
+  const {
+    zoomPercentage,
+    handleZoomIn,
+    handleZoomOut,
+    canZoomIn,
+    canZoomOut,
+  } = useZoom();
   return (
     <div className="flex items-center gap-2">
       <button

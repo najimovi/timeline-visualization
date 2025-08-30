@@ -1,5 +1,7 @@
 import timelineItems from '@/data/timelineItems';
 import Timeline from './components/Timeline';
+import { ZoomProvider } from '@/contexts/ZoomContext';
+import { ItemsProvider } from '@/contexts/ItemsContext';
 
 function App() {
   return (
@@ -11,7 +13,11 @@ function App() {
           </h1>
         </header>
         <main>
-          <Timeline items={timelineItems} />
+          <ItemsProvider items={timelineItems}>
+            <ZoomProvider>
+              <Timeline />
+            </ZoomProvider>
+          </ItemsProvider>
         </main>
       </div>
     </div>

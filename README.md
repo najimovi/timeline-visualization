@@ -62,6 +62,7 @@ Open [http://localhost:4173](http://localhost:4173) in the browser.
   - **Single Responsibility Principle**: Each component and hook has a focused purpose
   - **Descriptive Naming**: Clear and consistent naming conventions
   - **Modular Structure**: Logical file organization enhancing maintainability
+  - **Context for Shared State**: Used React Context API to avoid prop drilling
 - **Quality of Life**
   - **Tailwind CSS**: For rapid styling and responsive design
   - **TypeScript**: For type safety and better developer experience
@@ -82,16 +83,19 @@ Open [http://localhost:4173](http://localhost:4173) in the browser.
 - **Specialized Hooks**: Made use of React hooks to externalize several sections of the logic:
   - `useTimelineLayout`: Lane allocation algorithm preventing overlaps
   - `useTimeMarkers`: Zoom-responsive date calculations with viewport awareness
-  - `useZoom`: Performance-optimized zoom management with boundary states
+  - `useZoom`: Shared zoom state via React Context for consistent behavior
   - `useMaxLanes` & `useTimelineBounds`: Utility hooks following single responsibility principle
 
 ### 3. What I Would Change If Starting Over
 
-- **Research Prior Art**: Investigate existing/efficient approaches to solving overlap and apply
-- **Use D3.js (if possible)**: Consider it if this were to grow/continue.
+- **Code Hardening**: Improve robustness, find areas where time limit impacted on quality
 - **UX**
   - **Events Hover/Click Features**: Improve interactivity by bringing events to the front, highlight them, perhaps increase size slightly if needed for better readability
   - **Additional Interactions**: Help users better explore the timeline
+- **Check for Existing Solutions**
+  1. **Research Libraries**: Look for existing timeline libraries/components to avoid reinventing the wheel
+  2. **Evaluate Trade-offs**: Consider pros/cons of using a library vs custom solution
+- **Use D3.js (if possible)**: Consider it if this were to grow/continue.
 - **Architecture Enhancements**
   - **Design System**: Storybook for isolated component development and documentation
   - **Observability**: Integrate Sentry/DataDog for error/performance monitoring
@@ -143,10 +147,12 @@ Open [http://localhost:4173](http://localhost:4173) in the browser.
     │   │   ├── TimeMarkers.tsx        # Month/day markers
     │   │   ├── ZoomControls.tsx       # Zoom control buttons
     │   │   └── EventLegend.tsx        # Bottom summary legend
+    │   ├── contexts/
+    │   │   └── ZoomContext.tsx        # Shared zoom state via React Context
     │   ├── hooks/
     │   │   ├── useTimelineLayout.ts   # Lane allocation algorithm
     │   │   ├── useTimeMarkers.ts      # Time marker calculations
-    │   │   ├── useZoom.ts             # Zoom state management
+    │   │   ├── useZoom.ts             # Zoom state access (via Context)
     │   │   ├── useMaxLanes.ts         # Max lanes calculation
     │   │   └── useTimelineBounds.ts   # Timeline date bounds
     │   ├── lib/
@@ -177,9 +183,9 @@ Open [http://localhost:4173](http://localhost:4173) in the browser.
   - **Tailwind CSS**: Utility-first styling for rapid UI development, responsive design
   - **Vite**: Lightweight approach, fast HMR, optimized builds, zero-config TypeScript
 - **Inspiration Sources**
-  - Greedy algorithms (<https://en.wikipedia.org/wiki/Interval_graph>, <https://www.cs.princeton.edu/~wayne/kleinberg-tardos/pearson/04GreedyAlgorithms>), label collision (<https://docs.mapbox.com/help/troubleshooting/optimize-map-label-placement/?utm_source=chatgpt.com>),
-  - Dribble, Coolors
-- **Type Colocation Strategy**
+  - Greedy algorithms (<https://en.wikipedia.org/wiki/Interval_graph>)
+  - Dribble, Tableau Public, FlowingData, Coolors
+- **Colocation**
   - Deliberately kept interfaces (e.g. `TimelineItem`) within their immediate usage rather than creating a `/types` folder avoiding premature abstraction.
 
 ### 5. How I Would Test This Component

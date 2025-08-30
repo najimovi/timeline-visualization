@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
-import type { ProcessedItem } from './useTimelineLayout';
+import { useTimelineLayout } from './useTimelineLayout';
+import { useZoom } from './useZoom';
 import { calculateOptimalDayStep } from '@/lib/calculations';
 
 export interface TimeMarker {
@@ -12,11 +13,6 @@ export interface TimeMarkersResult {
   days: TimeMarker[];
 }
 
-interface UseTimeMarkersProps {
-  processedItems: ProcessedItem[];
-  zoomLevel: number;
-}
-
 /**
  * Advanced time markers hook that generates intelligent date markers based on timeline data
  *
@@ -26,14 +22,13 @@ interface UseTimeMarkersProps {
  * - 1.0x - 1.5x: Every 3 days
  * - > 1.5x: Daily markers (maximum detail)
  *
- * @param processedItems - Timeline items with calculated positions
- * @param zoomLevel - Current zoom level affecting marker density
+ * Uses context for items and zoom level by default
+ *
  * @returns Object containing month and day marker arrays
  */
-export const useTimeMarkers = ({
-  processedItems,
-  zoomLevel,
-}: UseTimeMarkersProps): TimeMarkersResult => {
+export const useTimeMarkers = (): TimeMarkersResult => {
+  const processedItems = useTimelineLayout();
+  const { zoomLevel } = useZoom();
   const [viewportWidth, setViewportWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200,
   );

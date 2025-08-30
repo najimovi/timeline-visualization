@@ -1,13 +1,9 @@
 import { twMerge } from 'tailwind-merge';
-import type { TimeMarkersResult } from '@/hooks/useTimeMarkers';
+import { useTimeMarkers } from '@/hooks/useTimeMarkers';
 import { formatMonthYear, formatDayMonth } from '@/lib/formatters';
 
-interface TimeMarkersProps {
-  timeMarkers: TimeMarkersResult;
-  zoomLevel: number;
-}
-
-export default function TimeMarkers({ timeMarkers }: TimeMarkersProps) {
+export default function TimeMarkers() {
+  const timeMarkers = useTimeMarkers();
   return (
     <div className="border-border bg-muted/30 absolute top-0 right-0 left-0 h-16 border-b">
       {/* Month markers */}

@@ -1,13 +1,14 @@
 import React from 'react';
 import type { ProcessedItem } from '@/hooks/useTimelineLayout';
+import { useZoom } from '@/hooks/useZoom';
 import { TIMELINE_LAYOUT } from '@/lib/constants';
 
 interface TimelineEventProps {
   item: ProcessedItem;
-  zoomLevel: number;
 }
 
-const TimelineEvent = React.memo(({ item, zoomLevel }: TimelineEventProps) => {
+const TimelineEvent = React.memo(({ item }: TimelineEventProps) => {
+  const { zoomLevel } = useZoom();
   const barWidth = Math.max(
     item.width * 100,
     TIMELINE_LAYOUT.MINIMUM_BAR_WIDTH,

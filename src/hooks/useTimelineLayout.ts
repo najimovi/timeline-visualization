@@ -1,5 +1,8 @@
 import { useMemo } from 'react';
 import { calculateBarPixelWidth } from '@/lib/calculations';
+import { useItems } from '@/contexts/ItemsContext';
+import { useZoom } from '@/hooks/useZoom';
+import { TIMELINE_COLORS } from '@/lib/constants';
 
 export interface TimelineItem {
   id: number;
@@ -18,31 +21,23 @@ export interface ProcessedItem extends TimelineItem {
   color: string;
 }
 
-interface UseTimelineLayoutProps {
-  items: TimelineItem[];
-  zoomLevel: number;
-  colors: readonly string[];
-}
-
 /**
  * Advanced timeline layout hook that implements intelligent lane allocation algorithm
  *
  * Features:
  * - Greedy lane assignment for space efficiency (https://en.wikipedia.org/wiki/Interval_graph)
- * - Smart conflict resolution based on text length (https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/)
- * - Buffer-based overlap prevention (https://docs.mapbox.com/help/troubleshooting/optimize-map-label-placement/)
+ * - Smart conflict resolution based on text length
+ * - Buffer-based overlap prevention
  * - Adaptive text-fitting logic based on zoom level
  *
- * @param items - Array of timeline events
- * @param zoomLevel - Current zoom level affecting text visibility calculations
- * @param colors - Color palette for event styling
+ * Uses context for items and zoom level by default, no parameters needed
+ * 
  * @returns Processed items with lane assignments and positioning data
  */
-export const useTimelineLayout = ({
-  items,
-  zoomLevel,
-  colors,
-}: UseTimelineLayoutProps): ProcessedItem[] => {
+export const useTimelineLayout = (): ProcessedItem[] => {
+  const items = useItems();
+  const { zoomLevel } = useZoom();
+  const colors = TIMELINE_COLORS;
   return useMemo(() => {
     if (!items.length) return [];
 

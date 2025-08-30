@@ -1,103 +1,15 @@
-import { useState, useCallback, useMemo } from 'react';
-
-export interface ZoomConfig {
-  min: number;
-  max: number;
-  step: number;
-  initial: number;
-}
-
-export interface ZoomControls {
-  zoomLevel: number;
-  handleZoomIn: VoidFunction;
-  handleZoomOut: VoidFunction;
-  canZoomIn: boolean;
-  canZoomOut: boolean;
-  zoomPercentage: string;
-  resetZoom: VoidFunction;
-}
-
-interface UseZoomProps {
-  config?: Partial<ZoomConfig>;
-}
-
-// Default zoom configuration optimized for timeline visualization
-const DEFAULT_ZOOM_CONFIG: ZoomConfig = {
-  min: 0.5, // 50% minimum - prevents timeline from becoming too compressed
-  max: 4, // 400% maximum - prevents performance issues with extreme zoom
-  step: 1.5, // 1.5x multiplier - provides smooth zoom progression
-  initial: 1, // 100% starting zoom - natural baseline
-};
+import { useZoomContext } from '@/contexts/ZoomContext';
+export type { ZoomConfig, ZoomControls } from '@/contexts/ZoomContext';
 
 /**
- * Advanced zoom management hook with performance optimizations and UX enhancements
+ * Hook to access shared zoom state from ZoomContext
  *
- * Features:
- * - Configurable zoom bounds and step size
- * - Performance-optimized event handlers with useCallback
- * - Boundary state management (canZoomIn/canZoomOut)
- * - Formatted zoom percentage for UI display
- * - Smooth zoom progression with exponential steps
+ * This hook provides access to the centralized zoom state that is shared
+ * across all components. It ensures consistent zoom behavior throughout
+ * the application.
  *
- * Performance optimizations:
- * - useCallback for stable handler references (prevents child re-renders)
- * - useMemo for computed values (zoom percentage formatting)
- * - Boundary pre-calculation to avoid redundant state updates
- *
- * @param config - Optional zoom configuration overrides
- * @returns Complete zoom control interface
+ * @returns Complete zoom control interface from context
  */
-export const useZoom = ({ config = {} }: UseZoomProps = {}): ZoomControls => {
-  // Merge user config with sensible defaults
-  const zoomConfig = useMemo(
-    () => ({
-      ...DEFAULT_ZOOM_CONFIG,
-      ...config,
-    }),
-    [config],
-  );
-
-  const [zoomLevel, setZoomLevel] = useState(zoomConfig.initial);
-
-  // Performance-optimized zoom handlers with useCallback
-  // These handlers maintain stable references to prevent unnecessary re-renders
-  const handleZoomIn = useCallback(() => {
-    setZoomLevel((prev) => {
-      const newZoom = prev * zoomConfig.step;
-      return Math.min(newZoom, zoomConfig.max);
-    });
-  }, [zoomConfig.step, zoomConfig.max]);
-
-  const handleZoomOut = useCallback(() => {
-    setZoomLevel((prev) => {
-      const newZoom = prev / zoomConfig.step;
-      return Math.max(newZoom, zoomConfig.min);
-    });
-  }, [zoomConfig.step, zoomConfig.min]);
-
-  const resetZoom = useCallback(() => {
-    setZoomLevel(zoomConfig.initial);
-  }, [zoomConfig.initial]);
-
-  const canZoomIn = useMemo(() => {
-    return zoomLevel < zoomConfig.max;
-  }, [zoomLevel, zoomConfig.max]);
-
-  const canZoomOut = useMemo(() => {
-    return zoomLevel > zoomConfig.min;
-  }, [zoomLevel, zoomConfig.min]);
-
-  const zoomPercentage = useMemo(() => {
-    return `${Math.round(zoomLevel * 100)}%`;
-  }, [zoomLevel]);
-
-  return {
-    zoomLevel,
-    handleZoomIn,
-    handleZoomOut,
-    canZoomIn,
-    canZoomOut,
-    zoomPercentage,
-    resetZoom,
-  };
+export const useZoom = () => {
+  return useZoomContext();
 };

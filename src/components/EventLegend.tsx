@@ -1,10 +1,7 @@
-import type { ProcessedItem } from '@/hooks/useTimelineLayout';
+import { useTimelineLayout } from '@/hooks/useTimelineLayout';
 
-interface EventLegendProps {
-  processedItems: ProcessedItem[];
-}
-
-export default function EventLegend({ processedItems }: EventLegendProps) {
+export default function EventLegend() {
+  const processedItems = useTimelineLayout();
   return (
     <div className="text-muted-foreground space-y-2 text-sm">
       <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
